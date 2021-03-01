@@ -5,30 +5,101 @@
 需要安装lrzsz包，安装命令：yum install lrzsz
 二.Python3环境的搭建
 1.Python3.6的安装
-1.yum安装依赖包  避免后面出现少包的问题:
+（1）如果是新服务器，需要安装一些命令：yum -y install lrzsz
+（2）yum安装依赖包  避免后面出现少包的问题
 yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel mysql-devel
-2.wget下载Python版本: wget https://www.python.org/ftp/python/3.6.8/Python-3.6.8.tgz
-3.解压下载下来的Python压缩包: tar -xvf Python-3.6.8.tgz
-4.cdPythonERF: cd Python-3.6.8
-5. /configure --prefix=/root/python36
-6.编译:make
-7. : make install
-8.iPython : In -s /root/python36/bin/python3 /usr/bin/python36
-9.ipip3 : In -s /root/python36/bin/pip3 /usr/bin/pip3
-设置软链接方法:In-s 要设置软链接的目录/usr/bin/软链接启动名称
-三.docker环境搭建
-1.docker
-1.2ERE: yum install-y yum-utils device-mapper-persistent-data Ivm2
-2.badockertSItt: yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
-3.Frum F: yum makecache fast
-4. docker: yum install docker-ce
-5.把docker设置为开机启动项:sudo systemctl enable docker
-Bndocker: sudo systemctl start docker
-*Edocker: sudo systemctl stop docker
-&Eacute;dockert: sudo systemcti status docke
-四.MYSQL环境搭建
-1.EAdocker : docker pull mysql:5.7
-2.直看docker下所有容器:docker images
-3. RER: mkdir -p -/lianzhang/mysql/config ~/lianzhang/mysql/data
-4.E JMYSQL: docker run -p 3319:3306 --name lianzhang -v ~/lianzhang/mysql/conf./etc/mysql/conf.d -v -/lianzhang/mysql/logs:/logs -v -/lianzhang/mysql/data:/va
-MYSQL_ROOT_PASSWORD=123456 -d mysql:5.7
+可新建一个目录python36，用来存放Python压缩包和解压
+（3）wget下载python版本 https://www.python.org/ftp/python/  找到 Python-3.6.8.tgz包
+也可以通过rz命令，将本地的压缩包上传到linux上
+（4）解压tar -xvf Python-3.6.8.tgz
+（5）cd到解压后的Python-3.6.8下，指定安装目录，执行命令：./configure --prefix=/root/python36
+（6）执行编译：make
+（7）执行安装：make install
+（8）由于linux系统自带python2.7环境，输入python指向的是2.7版本。因此需要让python3 指向python3.6。需要设置python3的软链接，执行命令：ln -s  /root/python36/bin/python3.6  /usr/bin/python3
+（9）设置pip3 软链接，执行命令：ln -s /root/python36/bin/pip3  /usr/bin/pip3
+（10）后面所有的命令，都是用此命令设置软链接。（查找命令：find / -name pytest）
+
+2.	docker环境搭建
+（1）Docker 运行在 CentOS 7 (64-bit)上，要求系统为64位、系统内核版本为 3.10 以上。
+查看系统版本：cat /etc/centos-release
+查看系统内核版本：uname -a
+（2）安装Docker依赖包：sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+（3）添加docker 下载源地址：sudo yum-config-manager --add-repo  http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+（4）更新yum缓存：sudo yum makecache fast
+（5）安装docker : sudo yum install docker-ce（也可以指定版本安装：sudo yum install docker-ce-17.12.1.ce）
+（6）可以通过此命令查看docker版本：docker version
+（7）Docker安装在linux系统上实际也是一个应用，因此需要先启动服务。
+启动docker：systemctl start docker
+停掉docker服务：systemctl stop docker
+查看docker状态：systemctl status docker
+（8）需要将docker加入开机启动项：systemctl enable docker
+（9）卸载docker命令：sudo yum remove docker docker-client docker-client-latest  docker-common docker-latest docker-latest-logrotate docker-logrotate docker-selinux   docker-engine-selinux docker-engine
+
+3.	使用docker搭建mysql环境：
+（1）查看本地镜像命令  docker images
+（2）拉取(下载)镜像   docker pull mysql:5.7（5.7是mysql的标签，类似版本的概念，后面没有版本号的话，默认是最新的标签，即latest）
+（3）镜像仓库地址：https://hub.docker.com/
+（4）在家目录下，新建挂载目录：
+cd ~
+mkdir zxj2020
+mkdir -p ~/zxj2020/mysql/conf ~/zxj2020/mysql/data
+（5）启动容器：
+cd zxj2020/mysql/
+执行命令，指定端口号，将3306映射到3309：
+docker run -p 3309:3306 --name zxj2020 -v ~/zxj2020/mysql/conf:/etc/mysql/conf.d -v ~/zxj2020/mysql/logs:/logs -v ~/zxj2020/mysql/data:/var/lib/mysql  -e MYSQL_ROOT_PASSWORD=123456 -d mysql:5.7
+ 
+（6）进mysql容器操作mysql：docker exec -it zxj2020 bash
+（7）进mysql应用，使用root用户操作mysql：
+cd var/lib/mysql
+mysql -uroot -p
+输入密码后，就进入mysql了
+（8）进入mysql后的一些指令：（所有指令后都需要加;）
+查看数据库：show databases;
+进入数据库：user mysql;
+查看表：show tables;
+查询表：select * from user;
+退出mysql：quit
+（9）退出容器：exit
+
+
+二：httprunnermanager环境搭建
+
+（1）下载httprunnermanager_web.zip安装包
+（2）新建一个目录，存放并解压该压缩包：
+mkdir httprunnermanager2020
+cd httprunnermanager2020
+通过rz，将压缩包放入该目录
+解压：unzip httprunnermanager_web.zip
+（3）pip 安装requirements.txt文件：（需要先把自带的requirements.txt替换成悠悠提供的）
+cd httprunnermanger_web
+pip3 install -r requirements.txt
+（4）使用Navicat建库，数据库名称hrun，类型是utf8
+（5）编辑settings.py文件，修改数据库的配置
+cd HttpRunnerManager
+vi settings.py
+找到数据库相关数据，按i进入编辑模式，修改数据库信息，端口号记得设置成docker镜像中映射的（3309）
+修改成功后，按esc键退出编辑，并执行:wq命令保存并退出。
+执行cat settings.py命令，查看是否修改成功
+（6）Django同步数据库：
+回到httprunnermanger_web目录：cd ..
+生成表结构：python3 manage.py makemigrations
+同步数据库：python3 manage.py migrate
+（7）创建django的后台 /admin的账号密码
+python3 manage.py createsuperuser
+输入账号、邮箱、密码后，创建成功
+http://127.0.0.1:8000/admin/ 输入设置的用户名、密码，登录后台运维管理系统，可后台管理数据（服器的IP和端口号）
+（8）启动服务，设置访问端口号（设置成0.0.0.0是让所有人都可以访问，端口号可以随意设置）
+python3 manage.py runserver 0.0.0.0:9900
+（9）访问平台首页
+浏览器中输入：http://服务器ip:9900/api/register/
+（10）nohup挂后台启动（防止退出服器之后，不能继续访问平台）
+必须在httprunnermanger_web目录（manage.py所在目录下）
+执行命令：nohup python3 manage.py runserver 0.0.0.0:9900 >log.out 2>&1 &
+ 
+（11）其他命令：
+实时查看日志：tail -f log.out
+查看进程：ps -ef | python（ps -ef）
+杀掉进程：kill -9 进程id
+ 
+
+
