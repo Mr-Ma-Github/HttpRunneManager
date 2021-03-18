@@ -82,7 +82,7 @@
     rm -f requirements.txt
     通过rz命令，将提供的requirements.txt上传到该目录下
     pip3 install -r requirements.txt
-（4）使用Navicat建库，数据库名称（可自定义）为hrun，类型是utf8
+（4）使用Navicat建库，数据库名称（可自定义）为hrun，类型是utf8，排序规则是：utf-8_general_ci
 （5）编辑settings.py文件，修改数据库的配置
     cd HttpRunnerManager
     vi settings.py
