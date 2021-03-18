@@ -183,8 +183,9 @@
 <li><a href="http://localhost:5555/dashboard">任 务 监 控</a></li>修改ip地址为flower所在ip地址，以及flower启动时的前端端口
 
 四。重启服务器后怎么启动容器和服务
-1.启动mysql容器：
-2.启动rabbitmq3.8
+docker ps -a：查看所有容器
+1.启动mysql容器：docker start 容器ID
+2.启动rabbitmq3.8：docker start 容器ID
 3.使用docker ps命令查看容器状态
 4.cd ~
 5.运行shell脚本：./starthrun.sh
