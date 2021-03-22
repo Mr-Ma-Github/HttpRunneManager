@@ -61,8 +61,8 @@
     执行以下命令：
     docker exec -it haowu bash
     cd /ect/mysql
-    安装vim：apt-get update
-		           apt-get install vim
+    安装vim: apt-get update
+	     apt-get install vim
     vim my.cnf
     保存以下数据
     [mysqld]
@@ -96,6 +96,8 @@
 （7）创建django的后台 /admin的账号密码
     python3 manage.py createsuperuser
     输入账号、邮箱、密码后，创建成功
+    python3 manage.py changepassword admin 可修改密码
+    admin password.1
     http://服务器IP:9900/admin/ 输入设置的用户名、密码，登录后台运维管理系统，可后台管理数据（服务器的IP和指定端口号）
 （8）启动服务，设置访问端口号（设置成0.0.0.0是让所有人都可以访问，端口号可以随意设置）
     python3 manage.py runserver 0.0.0.0:9900
@@ -104,7 +106,6 @@
 （10）nohup挂后台启动（防止退出服务器之后，不能继续访问平台）
     必须在httprunnermanger_web目录（manage.py所在目录下）
     执行命令：nohup python3 manage.py runserver 0.0.0.0:9900 >log.out 2>&1 &
- 
 （11）其他命令：
     实时查看日志：tail -f log.out
     查看进程：ps -ef | python（ps -ef | grep python）
