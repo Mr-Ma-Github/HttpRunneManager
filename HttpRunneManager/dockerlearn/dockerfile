@@ -1,0 +1,22 @@
+# 基于python3.6.13镜像
+FROM python:3.6.13
+
+MAINTAINER mhy <15083158852@163.com>  # 写不写都可以
+
+# 更新pip
+RUN pip install --upgrade pip --index-url https://pypi.douban.com/simple
+
+# 工作目录
+WORKDIR /workcode
+
+# 添加文件
+ADD . /workcode
+
+# pip安装依赖包
+RUN pip install -r requirements.txt --index-url https://pypi.douban.com/simple
+
+# 传递参数
+ENTRYPOINT ["pytest"]
+
+# 默认显示help帮助信息
+CMD ["--help"]

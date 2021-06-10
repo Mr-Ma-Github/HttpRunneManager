@@ -1,0 +1,49 @@
+-   config:
+        name: testcase description
+        variables: {}
+        request:
+            base_url: $host
+-   test:
+        name: 1.登录
+        request:
+            headers:
+                User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36
+                    (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
+                content-type: application/json
+            json:
+                password: password.1
+                username: haiyu.ma
+            method: POST
+            url: /api/authenticate
+        extract:
+        -   token: content.id_token
+        validate:
+        -   eq:
+            - status_code
+            - 200
+        -   eq:
+            - headers.Content-Type
+            - application/json;charset=UTF-8
+        -   len_eq:
+            - content.id_token
+            - 1895
+-   test:
+        name: 2.获取患者信息-依赖登录
+        request:
+            headers:
+                User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36
+                    (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
+                content-type: application/json
+                Authorization: Bearer $token
+            method: GET
+            url: /api/patients?page=0&size=20&sort=id,desc
+        validate:
+        -   eq:
+            - status_code
+            - 200
+        -   eq:
+            - headers.Content-Type
+            - application/json;charset=UTF-8
+        -   contains:
+            - content.0
+            - createdBy

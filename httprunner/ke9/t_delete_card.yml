@@ -1,0 +1,39 @@
+-   config:
+        name: test delete card
+        variables: {}
+        request:
+            base_url: ${ENV(host)}
+-   test:
+        name: 登录
+        request:
+            headers:
+                content-type: application/json
+            json:
+                password: "123456"
+                username: test
+            method: POST
+            url: /api/v1/login
+        extract:
+        -   token: content.token
+        validate:
+        -   eq:
+            - status_code
+            - 200
+        -   eq:
+            - content.msg
+            - login sucess!
+
+-   test:
+        name: 删除
+        variables:
+            card_id: 3
+             : "INSERT INTO `hrun`.`UserInfo`(`id`, `create_time`, `update_time`, `username`, `password`, `email`, `status`) VALUES (3, '2021-03-02 23:49:43.669098', '2021-03-02 23:49:43.669131', 'haiyu.ma', 'password.1', '123@163.com', 1);"
+        request:
+            method: DELETE
+            url: /api/v1/bandcards/$card_id/
+        validate:
+        -   eq:
+            - status_code
+            - 204
+        setup_hooks:
+            - ${execute_sql($inster_card)}

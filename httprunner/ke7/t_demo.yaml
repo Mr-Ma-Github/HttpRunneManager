@@ -1,0 +1,57 @@
+-   config:
+        name: testcase description
+        variables: {}
+        request:
+            base_url: $host
+        setup_hooks: # 调用如果写在config里，那么只有文件中所有的用例都会在前置后置中间执行
+            - ${hook_up()}
+        teardown_hooks:
+            - ${hook_down()}
+-   test:
+        name: 登录
+        request:
+            headers:
+                User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36
+                    (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
+                content-type: application/json
+            json:
+                password: password.1
+                username: haiyu.ma
+            method: POST
+            url: /api/authenticate
+        validate:
+        -   eq:
+            - status_code
+            - 200
+        -   eq:
+            - headers.Content-Type
+            - application/json;charset=UTF-8
+        -   contains:
+            - content.id_token
+            - eyJhbGciOiJIUzUxMiJ9.
+        setup_hooks: # 调用如果写在用例里，那么只有写了调用的用例才会执行前置后置
+            - ${hook_up()}
+        teardown_hooks:
+            - ${hook_down()}
+-   test:
+        name: 登录2
+        request:
+            headers:
+                User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36
+                    (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
+                content-type: application/json
+            json:
+                password: password.1
+                username: haiyu.ma
+            method: POST
+            url: /api/authenticate
+        validate:
+        -   eq:
+            - status_code
+            - 200
+        -   eq:
+            - headers.Content-Type
+            - application/json;charset=UTF-8
+        -   contains:
+            - content.id_token
+            - eyJhbGciOiJIUzUxMiJ9.

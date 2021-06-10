@@ -1,0 +1,28 @@
+-   config: # 不能用，但是方法是这样的
+        name: test register api
+        variables:
+            delete_sql: "delete from auth_user where username = 'test_1';"
+        request:
+            base_url: ${ENV(host)}  # 调用debugtalk中ENV函数，通过函数读取.env文件中的变量
+-   test:
+        name: 注册接口
+        request:
+            headers:
+                User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36
+                    (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
+                content-type: application/json
+            json:
+                  password: "123456"
+                  username: test_1
+                  email: 123@qq.com
+            method: POST
+            url: /api/v1/register
+        validate:
+        -   eq:
+            - status_code
+            - 200
+        -   eq:
+            - content.msg
+            - 注册成功！
+        setup_hooks:
+            - ${execute_sql($delete_sql)}

@@ -1,0 +1,25 @@
+-   config:
+        name: testcase description
+        variables: {}
+-   test:
+        name: /api/authenticate
+        request:
+            headers:
+                User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36
+                    (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
+                content-type: application/json
+            json:
+                password: password.1
+                username: haiyu.ma
+            method: POST
+            url: http://52.83.166.21:8092/api/authenticate
+        validate:
+        -   eq:
+            - status_code
+            - 200
+        -   eq:
+            - headers.Content-Type
+            - application/json;charset=UTF-8
+        -   eq:
+            - content.id_token
+            - eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoYWl5dS5tYSIsImF1dGgiOiJST0xFX09SREVSX1IsUk9MRV9VU0VSIiwiZXhwIjoxNjE0ODY3NjE2fQ.rry4jZSYdSsB-t5cPb_5gODXsYNlL7aclyMqsbdu-W5gdT8_WUctlgHuoh44iXgvEPL-ZrknRUlU78FH-xJp8g

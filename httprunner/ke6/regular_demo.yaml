@@ -1,0 +1,17 @@
+-   config:
+        name: test demo
+-   test:
+        name: 1.正则提取案例
+        request:
+            verify: false
+            method: GET
+            url: http://52.83.166.21:8091
+        extract:
+        -   title: <title>(.+?)</title>
+        validate:
+        -   eq:
+            - status_code
+            - 200
+        -   eq:
+            - $title
+            - ClinicalRepository

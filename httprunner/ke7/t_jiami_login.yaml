@@ -1,0 +1,30 @@
+-   config: # 不能用，但是方法是这样的
+        name: testcase description
+        variables: {}
+        request:
+            base_url: http://49.235.92.12:9000
+-   test:
+        name: 登录
+        request:
+            headers:
+                User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36
+                    (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
+                content-type: application/json
+            json:
+                params:
+                    password: '123456'
+                    username: test
+            method: POST
+            url: /api/v2/login
+        validate:
+        -   eq:
+            - status_code
+            - 200
+        -   eq:
+            - headers.Content-Type
+            - application/json;charset=UTF-8
+        -   eq:
+            - content.msg
+            - login success!
+        setup_hooks:
+            - ${setup_jiami_request($request)}

@@ -1,0 +1,34 @@
+-   config: # 不能用，但是方法是这样的
+        name: testcase description
+        variables: {}
+        request:
+            base_url: ${ENV(host)}  # 调用debugtalk中ENV函数，通过函数读取.env文件中的变量
+-   test:
+        name: 登录
+        times: 5  # 可以设置当前用例执行次数
+        skip: 此功能暂不测  # skip是无条件跳过用例，不执行此用例，后面可以加上描述跳过的原因
+        request:
+            headers:
+                User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36
+                    (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
+                content-type: application/json
+            json:
+                params:
+                    password: ${ENV(password)}
+                    username: ${ENV(username)}
+            method: POST
+            url: /api/v2/login
+        validate:
+        -   eq:
+            - status_code
+            - 200
+        -   eq:
+            - headers.Content-Type
+            - application/json;charset=UTF-8
+        -   eq:
+            - content.msg
+            - login success!
+        setup_hooks:
+            - ${setup_jiami_request($request)}
+        teardown_hooks:
+            - ${teardown_jiemi_response($response)}
